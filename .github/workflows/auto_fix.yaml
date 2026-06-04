@@ -8,6 +8,7 @@ env:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   auto_fix:
@@ -16,7 +17,6 @@ jobs:
       - uses: actions/checkout@v6
         name: Checkout main repo
         with:
-          fetch-depth: 0
           show-progress: false
       - name: Use Node.js
         uses: actions/setup-node@v6
@@ -25,7 +25,7 @@ jobs:
           check-latest: true
           cache: npm
       - name: Installing the dependencies
-        uses: AnnAngela/cached_node-modules@v4
+        uses: AnnAngela/cached_node-modules@v5
         with:
           command: npm run ci
       - name: Git config

@@ -20,19 +20,19 @@ type: general
 
 package: false
 
-rights:
-  - edit
-  - autoconfirmed
+rights: 
+  - viewmywatchlist
 
 peers: []
 
 dependencies:
-  - ext.gadget.Force_preview
+  - ext.gadget.displayname-show
 
 _sites:
   - zh
+  - commons
 
-_section: editing
+_section: user
 
 _files:
-  - Gadget-Force_preview_upon_user_request.js
+  - Gadget-displayname-copy.js

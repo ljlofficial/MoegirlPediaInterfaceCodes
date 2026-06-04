@@ -18,7 +18,7 @@
         if (checkIfAvatarLoaded(target)) {
             return;
         }
-        const userName = target.textContent.trim();
+        const userName = target.title.trim();
         const avatar = target.dataset.userAvatar;
 
         const avatarLink = document.createElement("a");
@@ -37,7 +37,7 @@
         });
 
         avatarLink.classList.add("userlink-avatar");
-        avatarLink.href = `https://commons.moegirl.org.cn/Special:ViewAvatar?user=${userName}`;
+        avatarLink.href = `/Special:ViewAvatar?user=${userName}`;
         avatarLink.target = "_blank";
         avatarLink.title = "查看头像";
         avatarLink.appendChild(img);
@@ -50,15 +50,15 @@
 
         return avatarLink;
     };
-
-    mw.hook("wikipage.content").add(
-        /**
-         * @param {JQuery<HTMLElement>} $content
-         */
-        ($content) => {
-            $content.find(".mw-userlink[data-user-avatar]").each((_, el) => {
-                attachAvatarToUserLink(el);
-            });
+    /**
+     * @param {JQuery<HTMLElement>} $content
+     */
+    const parser = ($content) => {
+        $content.find(".mw-userlink[data-user-avatar]").each((_, el) => {
+            attachAvatarToUserLink(el);
         });
+    };
+    document.querySelectorAll(".mw-parser-output").forEach((content) => parser($(content)));
+    mw.hook("wikipage.content").add(parser);
 })();
 // </pre>

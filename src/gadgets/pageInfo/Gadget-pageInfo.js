@@ -9,21 +9,26 @@
         $container.append($("<br>"), document.createTextNode(`${mw.msg(action)}：${levels.map((level) => mw.msg(`protect-level-${level}`)).join("、")}`), $requestList);
         return $requestList;
     };
-    const buildRequestUrl = ({ title, preload, preloadTitle, scriptPath }) => {
+    const buildRequestUrl = ({ title, preload, preloadTitle, preloadParams, scriptPath }) => {
         const requestURL = new URL(`${scriptPath}/index.php`, location.origin);
         requestURL.searchParams.set("action", "edit");
         requestURL.searchParams.set("preload", preload);
         requestURL.searchParams.set("preloadtitle", preloadTitle);
+        requestURL.searchParams.set("dtpreload", "1");
         requestURL.searchParams.set("section", "new");
         requestURL.searchParams.set("title", title);
+        if (Array.isArray(preloadParams)) {
+            preloadParams.forEach((param) => requestURL.searchParams.append("preloadparams[]", param));
+        }
         return requestURL.href;
     };
-    const appendRequestLink = ($list, { title, preload, preloadTitle, scriptPath, text }) => {
+    const appendRequestLink = ($list, { title, preload, preloadTitle, preloadParams, scriptPath, text }) => {
         $("<li>").append($("<a>", {
             href: buildRequestUrl({
                 title,
                 preload,
                 preloadTitle,
+                preloadParams,
                 scriptPath,
             }),
             target: "_blank",
@@ -126,7 +131,7 @@
                 actions = pageActions;
             }
         } catch (error) {
-            mw.log.warn("[Gadget-pageInfo] Failed to query intestactions", error);
+            console.warn("[Gadget-pageInfo] Failed to query intestactions", error);
             actions = {};
         }
         if (wgUserName) {
@@ -140,24 +145,32 @@
                     scriptPath: wgScriptPath,
                     text: "提出编辑请求",
                 });
+            } else {
+                $editRequestList?.remove();
             }
             if (actions.move === false && $moveRequestList) {
                 appendRequestLink($moveRequestList, {
                     title: "萌娘百科讨论:讨论版/操作申请",
                     preload: "Template:移动请求预载",
                     preloadTitle: `移动请求${requestTitleSuffix}`,
+                    preloadParams: [wgPageName],
                     scriptPath: wgScriptPath,
                     text: "提出移动请求",
                 });
+            } else {
+                $moveRequestList?.remove();
             }
             if (actions.create === false && $createRequestList) {
                 appendRequestLink($createRequestList, {
                     title: "萌娘百科讨论:讨论版/操作申请",
                     preload: "Template:创建请求预载",
                     preloadTitle: `创建请求${requestTitleSuffix}`,
+                    preloadParams: [wgPageName],
                     scriptPath: wgScriptPath,
                     text: "提出创建请求",
                 });
+            } else {
+                $createRequestList?.remove();
             }
         }
     }

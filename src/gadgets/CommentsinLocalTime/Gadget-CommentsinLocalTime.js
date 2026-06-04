@@ -65,7 +65,7 @@ $(() => {
         tooltipFormats: [
             (_, originalText) => `原始时间戳：${originalText}`,
             "[年月日星时：]LLLL",
-            "[ISO 8601式：]YYYY-MM-DDTHH:mmZ",
+            "[ISO8601式：]YYYY-MM-DDTHH:mmZ",
         ],
         dynamic: true,
         excludeNamespaces: Object.keys(mw.config.get("wgFormattedNamespaces")).map((ns) => +ns).filter((ns) => ns < 0 || ns % 2 === 0),
@@ -171,10 +171,8 @@ $(() => {
     //     mw.loader.using(["moment"]),
     //     $.ready,
     // ]);
-    $(".mw-parser-output").each(parser);
-    mw.hook("wikipage.content").add(($content) => {
-        $content.each(parser);
-    });
+    document.querySelectorAll(".mw-parser-output").forEach((content) => parser(null, content));
+    mw.hook("wikipage.content").add(($content) => $content.each(parser));
     formatTimestamp();
     if (!window.LocalComments.dynamic) {
         return;

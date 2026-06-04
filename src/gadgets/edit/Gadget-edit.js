@@ -75,7 +75,7 @@ $(() => {
         }, 137);
     }
     // 只在ns0和ns2的子页面加载预加载工具
-    if (![0, 2].includes(wgNamespaceNumber) || wgNamespaceNumber === 2 && !wgPageName.includes("/") || mw.config.get("wgPageContentModel") !== "wikitext") {
+    if (![0, 2, 114, 118].includes(wgNamespaceNumber) || wgNamespaceNumber === 2 && !wgPageName.includes("/") || mw.config.get("wgPageContentModel") !== "wikitext") {
         $("#multiboilerplateform").remove();
     }
     // 非维护组、技术组成员提出方针编辑请求时提醒需要走提案
@@ -313,7 +313,7 @@ $(() => {
                     "file-alt": {
                         label: mw.msg("wikieditor-toolbar-tool-file-title"),
                         type: "button",
-                        icon: "https://img.moegirl.org.cn/common/3/3e/Insert-file.svg",
+                        icon: "https://storage.moegirl.org.cn/moegirl/commons/3/3e/Insert-file.svg",
                         offset: [2, -1438],
                         action: {
                             type: "callback",
