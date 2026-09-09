@@ -1,4 +1,18 @@
 {
+    "GH:Claude": [
+        {
+            "commit": "ef530b60ba1680162248a602aeb8dd84ec6847ea",
+            "datetime": "2026-08-05T01:57:46.000Z",
+            "changedFiles": 6
+        }
+    ],
+    "GH:Claude Opus 4.8 (1M Context)": [
+        {
+            "commit": "172989c2cfbdc125e1256d59f2c83aeb0a6f72b9",
+            "datetime": "2026-08-31T05:34:50.000Z",
+            "changedFiles": 1
+        }
+    ],
     "GH:peter": [
         {
             "commit": "de3b4c6bd6714c394193a79489765502ddf21397",
@@ -7,6 +21,21 @@
         }
     ],
     "U:AnnAngela": [
+        {
+            "commit": "cbb5bc1406fa4d9c0d7c19b7431da1cc374e8115",
+            "datetime": "2026-09-01T09:24:18.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "c55d24c2f4ef137c1ab5059ec43e2e607e320a1a",
+            "datetime": "2026-08-28T15:18:25.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "4f5da4ba6cafa6e9030f4a91af9f404ba33687b3",
+            "datetime": "2026-08-28T09:43:29.000Z",
+            "changedFiles": 1
+        },
         {
             "commit": "0bb7e05d5dc4b97981639b5b804fce009089d3e5",
             "datetime": "2026-06-11T09:13:22.000Z",
@@ -2037,6 +2066,11 @@
     ],
     "U:BearBin": [
         {
+            "commit": "1e93ccee4eedac85ea6df44f8697ae8d92f280a4",
+            "datetime": "2026-08-20T01:26:24.000Z",
+            "changedFiles": 2
+        },
+        {
             "commit": "f0286af2700f21efd7835fd11ec92260d97d8e66",
             "datetime": "2026-06-05T08:37:01.000Z",
             "changedFiles": 1
@@ -2847,6 +2881,158 @@
         {
             "commit": "52cb2fa5c24ea25f418bd908c77b9cff78a71f9b",
             "datetime": "2022-07-14T05:53:03.000Z",
+            "changedFiles": 1
+        }
+    ],
+    "U:SaoMikoto": [
+        {
+            "commit": "1585f77e13903556c356fdd4df095631ba8158d0",
+            "datetime": "2026-09-06T04:57:09.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "06130dc5cee64d59f84b6ea76a7ee8974bfb7af8",
+            "datetime": "2026-09-04T06:04:46.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "a5d1b21844856ea8e57c3015903c4ae6ab2c4ce7",
+            "datetime": "2026-09-04T06:02:25.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "871345d388977bba52891e0b73f284392f542db2",
+            "datetime": "2026-09-02T03:47:04.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "88985aa79d33ff81d36150b8b56f21d4b118632a",
+            "datetime": "2026-09-01T14:26:52.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "48daade5b0f00e1667d0401b79f57e5c5ae8c615",
+            "datetime": "2026-09-01T01:58:01.000Z",
+            "changedFiles": 8
+        },
+        {
+            "commit": "680dece8feb3d8912b28c964a8bc1d8ab27bc6b9",
+            "datetime": "2026-08-31T13:43:09.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "a414ae1e14cffe05da50963ef3776bc7672df0e5",
+            "datetime": "2026-08-31T13:29:39.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "172989c2cfbdc125e1256d59f2c83aeb0a6f72b9",
+            "datetime": "2026-08-31T05:34:50.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "5adc9438f079d6b77157ff9f3649008f60ac915a",
+            "datetime": "2026-08-29T14:06:56.000Z",
+            "changedFiles": 58
+        },
+        {
+            "commit": "6b0af0a1ba56be6ad55cee0997dc68b818ed12aa",
+            "datetime": "2026-08-27T04:28:25.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "68fe7adc79f321197f15696561253f4fefd55534",
+            "datetime": "2026-08-27T04:18:52.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "2c120c742e26a98cd7bff6126090e4562673b3f2",
+            "datetime": "2026-08-22T04:05:46.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "687fdeaf3f57e440b056e6ba4dd2aa37ee713651",
+            "datetime": "2026-08-20T04:29:18.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "b8811595ac1bf3da0df919e244d3a7bf25be8b6f",
+            "datetime": "2026-08-19T06:13:19.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "c53e07d4b891fb1a33f1118f8045c293df8a8cd0",
+            "datetime": "2026-08-19T05:51:28.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "2bd7c05e6bdb695688e9e4f813ecb26ea743942d",
+            "datetime": "2026-08-18T03:26:10.000Z",
+            "changedFiles": 3
+        },
+        {
+            "commit": "091e297cc43371a84f6d0d051cee6af3d98eb4cb",
+            "datetime": "2026-08-18T01:53:05.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "59ad858d3947f253b7a986b0aabf13f784a76641",
+            "datetime": "2026-08-18T01:46:16.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "9bcab6adc7161de30f9964d91b6a2802bca28d62",
+            "datetime": "2026-08-16T05:15:36.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "6317fdf988ed9dc37e6daa5df9d8ea077d2550ae",
+            "datetime": "2026-08-14T09:47:41.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "8c479823814a85dfbe1108b51b1523af605f134b",
+            "datetime": "2026-08-08T03:45:36.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "1d7d8fd3d9b50b1a179fc10e3b9224e34364fb0a",
+            "datetime": "2026-08-08T02:06:04.000Z",
+            "changedFiles": 2
+        },
+        {
+            "commit": "cf0196b85540d13f244704e46da9d54f0bf1d60f",
+            "datetime": "2026-08-05T11:34:53.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "affcc39e39408f06c51e22575378b79628328e08",
+            "datetime": "2026-08-05T11:22:26.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "7252d2f753bf75cbb1a9ea01fda0bc06b7601389",
+            "datetime": "2026-08-05T11:16:56.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "9a6a0e8402357578af446a811465741793ede2cf",
+            "datetime": "2026-08-05T10:33:11.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "156b72e42801517e8ec0e62d15245f29b736f969",
+            "datetime": "2026-08-05T10:30:08.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "bf3ad56ead87dd7c937eb722dc20c02bae17c054",
+            "datetime": "2026-08-05T06:48:30.000Z",
+            "changedFiles": 1
+        },
+        {
+            "commit": "fe404ed7ff35d78ce498fb50c633d53df666be52",
+            "datetime": "2026-08-04T09:36:49.000Z",
             "changedFiles": 1
         }
     ],

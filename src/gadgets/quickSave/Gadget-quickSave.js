@@ -1,4 +1,3 @@
-// <pre>
 "use strict";
 $(() => {
     const wgUserGroups = mw.config.get("wgUserGroups"),
@@ -195,7 +194,7 @@ $(() => {
                     const section = toclist[this.sectionTitle];
                     try {
                         await this.quickSave({ section });
-                        mw.notify(wgULS("即将刷新……", "即將刷新……"), {
+                        mw.notify(wgULS("即将刷新……", "即將重新整理……"), {
                             title: wgULS("存档成功", "存檔成功"),
                             type: "success",
                             tag: "AnnTools_QuickSave",
@@ -212,7 +211,7 @@ $(() => {
         async quickSave({ section }) {
             this.progress.log(wgULS("标题存在！", "標題存在！"));
             this.progress.nextStep();
-            this.progress.log(wgULS("正在获取段落内容……", "正在獲取段落內容……"));
+            this.progress.log(wgULS("正在获取段落内容……", "正在取得段落內容……"));
             const sectionContent = (await api.post({
                 action: "parse",
                 assertuser: wgUserName,
@@ -325,26 +324,32 @@ $(() => {
     $body.append(windowManager.$element);
     const qsDialog = new QSWindow();
     windowManager.addWindows([qsDialog]);
-    for (const { self, sectionTitle } of window.libDiscussionUtil.getDiscussionHeader(["saveNotice"])) {
-        const button = $("<a>");
-        button.attr("href", "javascript:void(0);").prop("draggable", false).addClass("AnnTools_QuickSave").text(wgULS("快速存档", "快速存檔"));
-        self.find(".mw-editsection-bracket").first()
-            .after('<span class="mw-editsection-divider"> | </span>')
-            .after(button);
-        button.on("click", () => {
-            if (!qsDialog.isVisible()) {
-                qsDialog.setSectionTitle(sectionTitle);
-                windowManager.openWindow(qsDialog);
+    const injectButtons = () => {
+        for (const { self, sectionTitle } of window.libDiscussionUtil.getDiscussionHeader(["saveNotice"])) {
+            if (self.find(".AnnTools_QuickSave")[0]) {
+                continue;
             }
-            return false;
-        });
-        const quicksave = self.find(".AnnTools_QuickSave");
-        if (self.find(".AnnTools_MarkAsResolved")[0]) {
-            const divider = quicksave.next(".mw-editsection-divider");
-            if (divider.length > 0) {
-                self.find(".mw-editsection .mw-editsection-bracket").first().after(divider).after(quicksave);
+            const button = $("<a>");
+            button.attr("href", "javascript:void(0);").prop("draggable", false).addClass("AnnTools_QuickSave").text(wgULS("快速存档", "快速存檔"));
+            self.find(".mw-editsection-bracket").first()
+                .after('<span class="mw-editsection-divider"> | </span>')
+                .after(button);
+            button.on("click", () => {
+                if (!qsDialog.isVisible()) {
+                    qsDialog.setSectionTitle(sectionTitle);
+                    windowManager.openWindow(qsDialog);
+                }
+                return false;
+            });
+            const quicksave = self.find(".AnnTools_QuickSave");
+            if (self.find(".AnnTools_MarkAsResolved")[0]) {
+                const divider = quicksave.next(".mw-editsection-divider");
+                if (divider.length > 0) {
+                    self.find(".mw-editsection .mw-editsection-bracket").first().after(divider).after(quicksave);
+                }
             }
         }
-    }
+    };
+    injectButtons();
+    window.libDiscussionUtil.onContentChange(injectButtons);
 });
-// </pre>

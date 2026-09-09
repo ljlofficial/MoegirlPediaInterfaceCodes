@@ -1,4 +1,3 @@
-// <nowiki>
 /* 这里的任何JavaScript将在 vector 皮肤加载
  * 请尊重萌娘百科版权，以下代码复制需要注明原自萌娘百科，并且附上URL地址http://zh.moegirl.org.cn/MediaWiki:Vector.js
  * 版权协定：知识共享 署名-非商业性使用-相同方式共享 3.0 中国大陆
@@ -96,10 +95,26 @@
             }
         });
     };
+    /* 切换至旧外观改为萌皮 */
+    const moeskinToggle = () => {
+        const menu = document.querySelector(".vector-main-menu-action-content"),
+            link = menu.querySelector("a"),
+            span = menu.querySelector("span"),
+            text = "切换到MoeSkin";
+        const url = new URL(window.location.href);
+        url.searchParams.set("useskin", "moeskin");
+        Object.assign(link, {
+            href: url.toString(),
+            title: text,
+            target: "_blank",
+        });
+        span.textContent = text;
+    };
     /* 函数执行体 */
     await $.ready;
     // 滚动公告
     startScroll();
     autoScroll();
     setupHeimuClickListener();
+    moeskinToggle();
 })();

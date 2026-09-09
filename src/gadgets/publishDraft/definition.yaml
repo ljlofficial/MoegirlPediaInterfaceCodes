@@ -29,9 +29,7 @@ rights:
 peers: []
 
 dependencies:
-  - mediawiki.api
-  - oojs-ui
-  - ext.gadget.site-lib
+  - ext.gadget.draftInfo
 
 _sites:
   - zh

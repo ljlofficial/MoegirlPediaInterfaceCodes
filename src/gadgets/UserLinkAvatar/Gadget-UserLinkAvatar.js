@@ -3,7 +3,6 @@
  */
 
 "use strict";
-// <pre>
 (() => {
     const DEFAULT_AVATAR = "https://storage.moegirl.org.cn/moegirl/moehime.jpg";
     /**
@@ -14,11 +13,26 @@
     /**
      * @param {HTMLAnchorElement} target
      */
+    const getUserName = (target) => {
+        const url = new URL(target.href, location.origin);
+        const pathname = decodeURIComponent(url.pathname);
+        const title = url.searchParams.get("title");
+        if (/^\/User:[^/=%]+/.test(pathname)) {
+            return pathname.match(/^\/User:([^/=%]+)/)[1].replace(/_/g, " ");
+        } else if (/^User:[^/=%]+/.test(title)) {
+            return title.match(/^User:([^/=%]+)/)[1].replace(/_/g, " ");
+        }
+        return "";
+    };
+
+    /**
+     * @param {HTMLAnchorElement} target
+     */
     const attachAvatarToUserLink = (target) => {
         if (checkIfAvatarLoaded(target)) {
             return;
         }
-        const userName = target.title.trim();
+        const userName = getUserName(target);
         const avatar = target.dataset.userAvatar;
 
         const avatarLink = document.createElement("a");
@@ -61,4 +75,3 @@
     document.querySelectorAll(".mw-parser-output").forEach((content) => parser($(content)));
     mw.hook("wikipage.content").add(parser);
 })();
-// </pre>

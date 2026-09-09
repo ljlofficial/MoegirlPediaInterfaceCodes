@@ -1,4 +1,3 @@
-// <pre>
 "use strict";
 $(() => {
     try {
@@ -181,7 +180,7 @@ $(() => {
                         try {
                             await this.doMove();
                             this.close({ action });
-                            mw.notify(wgULS("即将刷新……", "即將刷新……"), {
+                            mw.notify(wgULS("即将刷新……", "即將重新整理……"), {
                                 title: "打回成功",
                                 type: "success",
                                 tag: "lr-mtus",
@@ -331,4 +330,3 @@ $(() => {
         console.error("[MoveToUserSubpage] Setup error: ", e);
     }
 });
-// </pre>

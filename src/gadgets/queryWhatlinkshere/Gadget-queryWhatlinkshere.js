@@ -1,4 +1,3 @@
-// <pre>
 "use strict";
 $(() => (async () => {
     if (mw.config.get("wgCanonicalSpecialPageName") !== "Whatlinkshere") {
@@ -28,7 +27,7 @@ $(() => (async () => {
     const target = pageinfo.title;
     const ns = pageinfo.ns;
     const title = target.replace(ns === 0 ? "" : RegExp(`^(?:${wgNamespaceIds[ns].join("|")}):`, "i"), "");
-    $("#mw-content-text > .mw-htmlform-ooui-wrapper").after(`<span class="cdx-card" style="background-color:transparent"><span class="cdx-card__text"><span class="cdx-card__text__title">链入情况</span><span class="cdx-card__text__description"><a href="/Special:Search/${encodeURIComponent(`linksto:"${target}" insource:"${target}"`)}" target="_blank" class="external text">通过搜索查找链入</a></span><button id="queryWhatlinkshere" class="cdx-button cdx-button--action-progressive">点此查询链入情况</button><p id="whatlinkshere" style="display: none;">加载中……</p></span></span><span class="cdx-card" style="background-color:transparent"><span class="cdx-card__text"><span class="cdx-card__text__title">嵌入情况</span><span class="cdx-card__text__description"><a href="/Special:Search/${encodeURIComponent(`hastemplate:"${target}" insource:"${title}"`)}" target="_blank" class="external text">通过搜索查找嵌入</a></span><button id="queryWhatembeddedin" class="cdx-button cdx-button--action-progressive">点此查询嵌入情况</button><p id="whatembeddedin" style="display: none;">加载中……</p></span></span>`);
+    $("#mw-content-text > .mw-htmlform-ooui-wrapper").after(`<span class="cdx-card" style="background-color:transparent"><span class="cdx-card__text"><span class="cdx-card__text__title">链入情况</span><span class="cdx-card__text__description"><a href="/Special:Search/${encodeURIComponent(`linksto:"${target}" insource:"${target}"`)}?profile=all&fulltext=1" target="_blank" class="external text">通过搜索查找链入</a></span><button id="queryWhatlinkshere" class="cdx-button cdx-button--action-progressive">点此查询链入情况</button><p id="whatlinkshere" style="display: none;">加载中……</p></span></span><span class="cdx-card" style="background-color:transparent"><span class="cdx-card__text"><span class="cdx-card__text__title">嵌入情况</span><span class="cdx-card__text__description"><a href="/Special:Search/${encodeURIComponent(`hastemplate:"${target}" insource:"${title}"`)}?profile=all&fulltext=1" target="_blank" class="external text">通过搜索查找嵌入</a></span><button id="queryWhatembeddedin" class="cdx-button cdx-button--action-progressive">点此查询嵌入情况</button><p id="whatembeddedin" style="display: none;">加载中……</p></span></span>`);
     const queryWhatlinkshere = $("#queryWhatlinkshere");
     const queryWhatembeddedin = $("#queryWhatembeddedin");
     const whatlinkshere = $("#whatlinkshere");
@@ -78,16 +77,18 @@ $(() => (async () => {
             13: { count: 0, redirect: 0 },
             14: { count: 0, redirect: 0 },
             15: { count: 0, redirect: 0 },
+            114: { count: 0, redirect: 0 },
+            115: { count: 0, redirect: 0 },
+            116: { count: 0, redirect: 0 },
+            117: { count: 0, redirect: 0 },
+            118: { count: 0, redirect: 0 },
+            119: { count: 0, redirect: 0 },
             274: { count: 0, redirect: 0 },
             275: { count: 0, redirect: 0 },
             710: { count: 0, redirect: 0 },
             711: { count: 0, redirect: 0 },
             828: { count: 0, redirect: 0 },
             829: { count: 0, redirect: 0 },
-            2300: { count: 0, redirect: 0 },
-            2301: { count: 0, redirect: 0 },
-            2302: { count: 0, redirect: 0 },
-            2303: { count: 0, redirect: 0 },
         };
         const global = { redirect: 0 };
         const redirectCount = list.filter((item) => Reflect.has(item, "redirect")).length;
@@ -205,4 +206,3 @@ $(() => (async () => {
         whatembeddedin.after(ul);
     });
 })());
-// </pre>

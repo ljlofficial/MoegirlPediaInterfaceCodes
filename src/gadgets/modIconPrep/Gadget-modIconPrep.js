@@ -1,11 +1,7 @@
-// <pre>
 "use strict";
 
 (() => {
     if (!["Recentchanges", "Watchlist", "Recentchangeslinked", "Contributions"].includes(mw.config.get("wgCanonicalSpecialPageName"))) {
-        return;
-    }
-    if (!document.querySelector(".mw-rcfilters-ui-highlights-enhanced-toplevel")) {
         return;
     }
 
@@ -49,8 +45,12 @@
     };
 
     const processChangesList = () => {
-        const $containers = $(SELECTORS.CONTAINER);
-        $(`.${CLASSES.COUNT_WRAPPER}`).remove();
+        if (!document.querySelector(SELECTORS.CONTAINER)) {
+            return;
+        }
+        const $containers = $(SELECTORS.CONTAINER).filter(function () {
+            return $(this).find(`.${CLASSES.COUNT_WRAPPER}`).length === 0;
+        });
 
         $containers.each(function () {
             const $currentRow = $(this);
@@ -89,7 +89,7 @@
 
     $(document).ready(processChangesList);
 
+    mw.hook("wikipage.content").add(throttledProcess);
     $(window).on("rcfilters-dynamic-updates-complete", throttledProcess);
     $(document).on("mw.cx.event.vc.rcupdates", throttledProcess);
 })();
-// </pre>

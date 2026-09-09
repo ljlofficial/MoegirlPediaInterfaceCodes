@@ -1,4 +1,3 @@
-// <pre>
 "use strict";
 $(() => {
     try {
@@ -158,7 +157,7 @@ $(() => {
                         try {
                             await this.flagTemplate();
                             this.close({ action });
-                            mw.notify(wgULS("即将刷新……", "即將刷新……"), {
+                            mw.notify(wgULS("即将刷新……", "即將重新整理……"), {
                                 title: wgULS("挂删成功", "掛删成功"),
                                 type: "success",
                                 tag: "lr-ffd",
@@ -269,4 +268,3 @@ $(() => {
         console.error("[FlagForDeletion] Setup error:", e);
     }
 });
-// </pre>

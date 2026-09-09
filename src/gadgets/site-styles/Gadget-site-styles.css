@@ -241,18 +241,24 @@
     cursor: pointer;
 }
 
-.annotation .oo-ui-popupWidget {
+.annotation-marker {
+    position: absolute;
+    width: 0;
+    pointer-events: none;
+}
+
+.annotation-popup {
     z-index: 1000001;
     white-space: normal;
     color: #000;
     font-weight: normal;
 }
 
-.annotation .oo-ui-popupWidget-popup {
+.annotation-popup .oo-ui-popupWidget-popup {
     width: fit-content !important;
 }
 
-.annotation .oo-ui-popupWidget-body {
+.annotation-popup .oo-ui-popupWidget-body {
     width: fit-content;
     min-width: 5.5em;
     max-width: 11em !important;
@@ -265,39 +271,22 @@
     margin-top: 0;
 }
 
-/*
- * 感谢[[User:Great Brightstar]]的贡献，源码来自[[special:diff/834104]]
- * 以下是原注释：
- * 在这里使用 font-feature-settings 属性会让使用“lang”标签的元素强制使用 OpenType 技术显示本地化的变体字（通过激活 locl 标签，即便浏览器本身不直接激活）。
- * 如果你使用思源黑体（非 CN、JP、KO、TW 版）、Noto Sans CJK 显示文字的话就有可能看到效果。
- * 关于上述这个 CSS 属性的用法，参阅：https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings 注意：此文引用的 OpenType Feature Tags list 同样需要关注。
- * 如有任何问题请即刻禁用之
- * Nbdd0121: 将原来的[lang]改为span[lang]，这样就不会影响非{{lang}}的[lang]了 (e.g. div#mw-content-text)
- */
-span[lang] {
-    font-family: initial;
-    font-feature-settings: "locl" on;
-    -webkit-font-feature-settings: "locl" on;
-}
-
-[style*="font:" i] span[lang],
-[style*="font-family:" i] span[lang] {
-    font-family: inherit;
-}
-
 /* 日语斜体 */
 @font-face {
     font-family: JapaneseItalic;
     src: local(meiryo);
 }
 
-:is(i, [style*="italic" i]) span[lang="ja" i],
-span[lang="ja" i] :is(i, [style*="italic" i]) {
+:is(i, em, [style*="italic" i]) [lang]:lang(ja),
+[lang]:lang(ja):is(i, em, [style*="italic" i]),
+[lang]:lang(ja) :is(i, em, [style*="italic" i]) {
     font-family: JapaneseItalic, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-:is([style*="font:" i], [style*="font-family:" i]) :is(i, [style*="italic" i]) span[lang="ja" i],
-:is([style*="font:" i], [style*="font-family:" i]) span[lang="ja" i] :is(i, [style*="italic" i]) {
+:is(i, em, [style*="italic" i]):is([style*="font:" i], [style*="font-family:" i]) [lang]:lang(ja),
+:is([style*="font:" i], [style*="font-family:" i]) :is(i, em, [style*="italic" i]) [lang]:lang(ja),
+:is([style*="font:" i], [style*="font-family:" i]) [lang]:lang(ja):is(i, em, [style*="italic" i]),
+:is([style*="font:" i], [style*="font-family:" i]) [lang]:lang(ja) :is(i, em, [style*="italic" i]) {
     font-family: inherit;
 }
 
@@ -443,6 +432,11 @@ table.wikitable-green {
 
 /* 隐藏只供登录用户查看的内容 */
 .user-show {
+    display: none !important;
+}
+
+/* 隐藏仅供自动确认用户查看的内容 */
+.autoconfirmed-show {
     display: none !important;
 }
 

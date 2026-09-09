@@ -35,6 +35,7 @@
         "@type/libRequestAnimationFrame.d.ts",
         "@type/libip.d.ts",
         "@type/LocalObjectStorage.d.ts",
+        "@type/mermaid.d.ts",
         "@type/site-lib.d.ts",
         "Gadget/abusefilter33test",
         "Gadget/abusefilterEdit",
@@ -57,6 +58,7 @@
         "Gadget/displayname-default",
         "Gadget/displayname-show",
         "Gadget/DotsSyntaxHighlighter",
+        "Gadget/draftInfo",
         "Gadget/edit",
         "Gadget/editCount",
         "Gadget/editTopSection",
@@ -65,7 +67,6 @@
         "Gadget/flagBlocked",
         "Gadget/flagEditWar",
         "Gadget/float-toc",
-        "Gadget/FlowthreadTOC",
         "Gadget/Force_preview",
         "Gadget/Gadgets-definition-list.yaml",
         "Gadget/GiveYouUp",
@@ -100,6 +101,7 @@
         "Gadget/MarkAsResolved",
         "Gadget/MarkAsResolved-restricted",
         "Gadget/mboxCollapse",
+        "Gadget/mermaid",
         "Gadget/modIconPrep",
         "Gadget/ModerationStatus",
         "Gadget/moeskin-classic",
@@ -187,6 +189,7 @@
         "Global/Moeskin",
         "Global/Vector-2022",
         "Global/WikiLove",
+        "Group/autoconfirmed",
         "Group/checkuser",
         "Group/interface-admin",
         "Group/patroller",
@@ -196,5 +199,6 @@
         "Group/user"
     ],
     "conventionalCommits.storeScopesGlobally": false,
-    "github.copilot.chat.organizationInstructions.enabled": false
+    "github.copilot.chat.organizationInstructions.enabled": false,
+    "css.format.spaceAroundSelectorSeparator": true
 }

@@ -1,4 +1,3 @@
-// <nowiki>
 /* 这里的任何JavaScript将在全站加载
  * 请尊重萌娘百科版权，以下代码复制需要注明原自萌娘百科，并且附上URL地址 http://zh.moegirl.org.cn/MediaWiki:Gadget-site-js.js
  * 版权协定：知识共享 署名-非商业性使用-相同方式共享 3.0
@@ -338,25 +337,92 @@
         mw.hook("wikipage.content").add(initTabsInContent);
     };
     /* T:注解 */
-    $("body").on("mouseover mouseout", ".annotation", (event) => {
+    $("body").on("mouseenter mousemove mouseleave", ".annotation", (event) => {
         const $target = $(event.currentTarget);
         let popup = $target.data("popup");
+        let hideTimer = $target.data("hideTimer");
 
-        // 如果还没有创建 popup，则创建
+        // 惰性创建popup
         if (!popup) {
             const $content = $target.children(".annotation-content");
             if ($content.length === 0) {
                 return;
             }
+            // 创建不可见的标记元素当锚点，后续移到鼠标所在的文字行，使anchor定位准确
+            const $marker = $("<span>")
+                .addClass("annotation-marker")
+                .appendTo(document.body);
+
             popup = new OO.ui.PopupWidget({
                 $content: $content,
                 padded: true,
                 autoFlip: false,
+                $floatableContainer: $marker,
+                align: "center",
             });
-            $target.append(popup.$element).data("popup", popup);
+            popup.$element.addClass("annotation-popup");
+            $(document.body).append(popup.$element);
+
+            // 鼠标进入popup时取消关闭
+            popup.$element.on("mouseenter", () => {
+                clearTimeout($target.data("hideTimer"));
+            });
+
+            // 鼠标离开popup后延迟关闭，与annotation的mouseleave对称，给鼠标从popup移回annotation留出时间
+            popup.$element.on("mouseleave", () => {
+                const timer = setTimeout(() => {
+                    if (!popup.$element.is(":hover") && !$target.is(":hover")) {
+                        popup.toggle(false);
+                    }
+                }, 500);
+                $target.data("hideTimer", timer);
+            });
+
+            $target.data({ popup, marker: $marker });
         }
 
-        popup.toggle(event.type === "mouseover");
+        if (event.type === "mouseleave") {
+            // 延迟关闭，给鼠标从annotation移动到popup留出时间
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+                if (!popup.$element.is(":hover")) {
+                    popup.toggle(false);
+                }
+            }, 500);
+
+            $target.data("hideTimer", hideTimer);
+            return;
+        }
+
+        // 鼠标重新进入annotation时取消关闭
+        clearTimeout(hideTimer);
+
+        // 跨行 inline 元素：用 getClientRects() 找到鼠标所在的行片段
+        const rects = $target[0].getClientRects();
+        if (!rects.length) {
+            popup.toggle(false);
+            return;
+        }
+
+        let rect = rects[0];
+        if (rects.length > 1) {
+            for (const r of rects) {
+                if (event.clientY >= r.top && event.clientY < r.bottom) {
+                    rect = r;
+                    break;
+                }
+            }
+        }
+
+        // 把定位基准移动到该行片段的水平中心
+        $target.data("marker").css({
+            left: rect.left + rect.width / 2 + window.scrollX,
+            top: rect.top + window.scrollY,
+            height: rect.height,
+        });
+
+        popup.toggle(true);
+        popup.updateDimensions();
     });
 
     /* 修正嵌套使用删除线、黑幕、彩色幕和胡话模板 */

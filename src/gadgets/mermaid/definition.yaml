@@ -2,9 +2,9 @@ ResourceLoader: true
 
 hidden: false
 
-default: true
+default: false
 
-supportsUrlLoad: false
+supportsUrlLoad: true
 
 skins: []
 
@@ -20,19 +20,19 @@ type: general
 
 package: false
 
-rights:
-  - disabled
+rights: []
 
 peers: []
 
 dependencies:
   - ext.gadget.site-lib
-  - ext.flowthread
+  - ext.gadget.libCachedCode
 
 _sites:
   - zh
+  - commons
 
 _section: browsing
 
 _files:
-  - Gadget-FlowthreadTOC.js
+  - Gadget-mermaid.js

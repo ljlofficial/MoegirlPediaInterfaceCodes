@@ -31,7 +31,7 @@
   - [`scripts/postCommit/linguist-generated.js`](scripts/postCommit/linguist-generated.js) 用来自动生成 [`.gitattributes`](.gitattributes) 以告知 Github 如何区分代码是否自动生成；
   - [`scripts/postCommit/push.js`](scripts/postCommit/push.js) 用来推送由 Github Actions 做出的更改；
   - [`scripts/emailmapChecker/index.js`](scripts/emailmapChecker/index.js) 用来检查相关用户是否将其萌娘百科用户名和邮箱地址添加到 [`.mailmap`](.mailmap)，若当前环境为本地则检测 git 配置文件里的邮箱地址，若当前环境为 Github Actions 则检查相关 commits 的邮箱地址。
-  - [`scripts/ci/before.js`](scripts/ci/before.js) 和 [`scripts/ci/after.js`](scripts/ci/after.js) 用来在 `npm run ci` 里自动替换 [`package-lock.json`](package-lock.json) 里的 `resolved` 对应的 registry 为你本地设置的 registry，有助于加快安装速度。
+  - [`scripts/ci/selectRegistry.js`](scripts/ci/selectRegistry.js) 用来在 `npm run ci` 里测速选出最快的 npm registry 并写入 `.cache/ci-registry`，随后 `npm ci --replace-registry-host=always` 会让 npm 在安装时把 [`package-lock.json`](package-lock.json) 里 `resolved` 对应的 registry 替换为该源（不会改动 lock 文件本身），有助于加快安装速度。
   - [`scripts/minification/terser.js`](scripts/minification/terser.js) 用来使用 [Terser](https://) 对编译后的 JavaScript 代码进行压缩和优化，生成的文件会被放置在 `dist/` 文件夹下。
 - 自动化工具的配置文件：
   - [`eslint.config.js`](eslint.config.js) 配置 eslint，由于所有 Javascript 代码都需经过编译，故其 `parserOptions.ecmaVersion` 被指定为 `latest` 以便充分利用最新标准；
@@ -39,7 +39,7 @@
   - [`tsconfig.production.json`](tsconfig.production.json) 配置 tsc，用于编译代码；
   - [`.stylelintrc.yaml`](.stylelintrc.yaml) 配置 stylelint；
   - [`.postcssrc.yaml`](.postcssrc.yaml) 配置 postcss；
-  - [`.browserslistrc`](.browserslistrc) 配置 [autoprefixer](https://github.com/postcss/autoprefixer) 所使用的 [browserslist](https://github.com/browserslist/browserslist)，目前暂定锚定为 [`defaults`](https://github.com/browserslist/browserslist#full-list) 的基础上添加 `Chrome >= 86` 以适应萌百用户群体。
+  - [`.browserslistrc`](.browserslistrc) 配置 [autoprefixer](https://github.com/postcss/autoprefixer) 和 [`scripts/generatePolyfill`](scripts/generatePolyfill/index.js) 所使用的 [browserslist](https://github.com/browserslist/browserslist)，目前暂定锚定为 [`baseline newly available`](https://web.dev/series/baseline-newly-available?hl=zh-cn) 的基础上添加 `last 3 Firefox versions` 和 `Chrome 132`，并排除移动端以适应萌百编辑群体。
 - 代码部分：
   - [`src/gadgets`](src/gadgets) 以文件夹形式保存小工具，每一个文件夹都是一个小工具，里面包含以下内容：
     - `definition.yaml` 保存小工具配置，包括依赖项、所需权限等，以 `_` 开头的键值对是其他配置，如小工具所在的章节等；
@@ -61,22 +61,38 @@
 
 本仓库包含下列脚本：
 
-- `npm run test` 方便检测代码错误
+- `npm run test` 并行执行下列本地检查，任一失败即整体失败：
+  - `npm run test:eslint` 用 [ESLint](https://eslint.org/) 检查 [`src`](src) 下的 JavaScript；
+  - `npm run test:stylelint` 用 [stylelint](https://stylelint.io/) 检查 [`src`](src) 下的 CSS；
+  - `npm run test:v8r` 用 [v8r](https://github.com/chrishrb/v8r) 校验各小工具 `definition.yaml` 是否符合 [JSON Schema](.vscode/json-schemas)；
+  - `npm run test:mailmap` 检查本地 git 配置中的邮箱是否已登记在 [`.mailmap`](.mailmap)。
+- `npm run lint:scripts` 用 [ESLint](https://eslint.org/) 检查 `npm run test:eslint` 未覆盖的 Node 侧代码（[`scripts`](scripts)、根目录配置文件与 [`.husky`](.husky) 下的 `.mjs`）；检查范围由 [`scripts/modules/lintTargets.js`](scripts/modules/lintTargets.js) 定义，与 [`eslint.config.js`](eslint.config.js) 共用同一份
+- `npm run lint:commit-message` / `npm run lint:pr-title` 用 [commitlint](https://commitlint.js.org/) 校验当前 CI 事件中的提交信息 / PR 标题（规则见 [`commitlint.config.mjs`](commitlint.config.mjs)），供 CI 使用；两者均需在 GitHub Actions 中运行，本地直接执行会因缺少事件载荷而直接退出
 - `npm run format` 可修正可被自动修正的错误
-- `npm run ci` 可通过临时修改镜像源的方式加快 `npm ci` 速度
-- `npm run hooks:install` 可手动重新安装本仓库使用的本地 Git hooks
+- `npm run ci` 会测速选出最快的镜像源并让 npm 在安装时使用（不会改动 lock 文件），以加快 `npm ci` 速度
 - `npm run build` 手动编译全部（CSS+JS）代码
   - `npm run build:css` 手动编译所有 CSS 代码
   - `npm run build:js` 手动编译所有 JS 代码
 
-默认情况下，`npm install` / `npm run ci` 会自动安装本仓库的本地 Git hooks。安装完成后，当你执行 `git pull`（包括 `pull --rebase`）并且拉取结果修改了 [`package-lock.json`](package-lock.json) 时，Git 会自动执行一次 `npm run ci` 以刷新依赖。若你本地已经有自定义的 `post-merge` 或 `post-rewrite` hook，自动安装会跳过对应 hook，这种情况下需要你手动合并逻辑。
+`npm run test` 是提交前的快速检查，**不等价于 CI 的完整验证**：CI 还会额外执行 `npm run lint:scripts` 与 [`scripts/postcss/index.js`](scripts/postcss/index.js)（PostCSS 警告）；其中 `.mailmap` 检查在本地只校验当前 git 配置的邮箱，而在 CI 会校验本次推送或 PR 中每个 commit 的作者与提交者邮箱。`npm run test` 与 `npm run lint:scripts` 均不做 TypeScript 类型检查。完整的编译流程不在 GitHub Actions 中执行，而是在提交合并后由机器人完成（见下方[「编译流程」](#编译流程)）。
+
+### 提交前检查（Git hooks）
+
+本仓库使用 [Husky](https://typicode.github.io/husky/) 管理本地 Git hooks，由 `npm install` / `npm run ci` 触发的 `prepare` 脚本自动安装。提交时会自动执行：
+
+- `commit-msg`：用 [commitlint](https://commitlint.js.org/) 校验提交信息符合 [Conventional Commits](https://www.conventionalcommits.org/)（规则见 [`commitlint.config.mjs`](commitlint.config.mjs)）；
+- `pre-commit`：检查本地 git 配置的邮箱是否已登记在 [`.mailmap`](.mailmap)；
+- `post-merge` / `post-rewrite`：当你执行 `git pull`（包括 `pull --rebase`）且拉取结果修改了 [`package-lock.json`](package-lock.json) 时，自动执行一次 `npm run ci` 以刷新依赖。
+
+如需跳过检查，可用 `git commit --no-verify`，或临时设置 `HUSKY=0`（影响范围更大，会跳过全部 hooks）。请仅在确有必要时使用。
 
 ## 自动化流程
 
 - 每周日 23:00 UTC 会自动触发一次 Generate Polyfill CI；
 - 每天 00:15 UTC（但愿，Github Actions的 cron 延迟真的好高 \_(:з」∠)\_）会自动触发一次 postCommit CI；
 - 每提交一次 commit（包括提交 pull request 和在 pull request 里提交新的 commit），postCommit CI 会触发；
-- 当 postCommit CI 检测到新内容时，会自动触发一次 Linter test。
+- 当 postCommit CI 检测到新内容时，会自动触发一次 Linter test；
+- 每次 push、以及 PR 创建/重开/更新标题时，commit lint CI 会校验提交信息与 PR 标题是否符合 [Conventional Commits](https://www.conventionalcommits.org/)（用于兜底 `git commit --no-verify` 等绕过本地钩子的情况，并保证 squash 合并进入历史的 PR 标题合规）。
 
 ## 编译流程
 
@@ -90,12 +106,7 @@
 
 ## 已知问题
 
-- ~~[TypeScript 5.0](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#deprecations-and-default-changes:~:text=and%20setting%20values%3A-,%2D%2Dtarget%3A%20ES3,-%2D%2Dout) 将 `target: ES3` 编译选项[标记为弃用](https://github.com/microsoft/TypeScript/issues/51909#issue-1498969440:~:text=configurations%20as%20deprecated%3A-,target%3A%20ES3,-noImplicitUseStrict)，而萌娘百科目前（2023年3月）使用的 [MediaWiki 1.31.7](https://zh.moegirl.org.cn/Special:%E7%89%88%E6%9C%AC#mw-version-software:~:text=MediaWiki-,1.31.7,-PHP) 存在 bug 无法解析使用保留字作为点号属性名（`foo.return` 会报错），[这在 MediaWiki 1.33 被修复](https://www.mediawiki.org/wiki/MediaWiki_1.33/wmf.19#Core_changes:~:text=Make%20JSMinPlus%20allow%20reserved%20words%20as%20property%20name%20(ES5))。~~
-
-  ~~解决办法：~~
-
-  1. ~~等萌百升级 MediaWiki 系统；或~~（萌百真升级 MediaWiki 了）
-  2. ~~找一个支持编译为 ECMAScript 3 版本的编译工具。~~
+目前暂无。
 
 ## 参与维护
 
